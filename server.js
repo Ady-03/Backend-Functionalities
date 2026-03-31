@@ -1,14 +1,23 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000; // Use the PORT from environment variables or default to 3000
 const db = require("./db");
 const bodyParser = require("body-parser");
-require("dotenv").config();
+
 app.use(bodyParser.json());
+
+//Middleware to log incoming requests
+const logrequest = (req, res, next) => {
+  console.log(
+    `${new Date().toLocaleString()} Request Made to: ${req.OriginalUrl}`,
+  );
+  next();
+};
 
 const menuItem = require("./Schema/menu.js");
 
-app.get("/", (req, res) => {
+app.get("/", logrequest, (req, res) => {
   res.send("Hello World!");
 });
 
