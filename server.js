@@ -10,10 +10,14 @@ app.use(bodyParser.json());
 //Middleware to log incoming requests
 const logrequest = (req, res, next) => {
   console.log(
-    `${new Date().toLocaleString()} Request Made to: ${req.OriginalUrl}`,
+    `${new Date().toLocaleString()} Request Made to: ${req.originalUrl}`,
   );
-  next();
+  next(); // always use next function else log will be added
+  // but it wont go to server for the response as next phase
 };
+
+//
+app.use(logrequest);
 
 const menuItem = require("./Schema/menu.js");
 
