@@ -4,9 +4,8 @@ const app = express();
 const port = process.env.PORT || 3000; // Use the PORT from environment variables or default to 3000
 const db = require("./db");
 const bodyParser = require("body-parser");
-
 app.use(bodyParser.json());
-
+const passport = require("./Auth.js");
 //Middleware to log incoming requests
 const logrequest = (req, res, next) => {
   console.log(
@@ -18,10 +17,11 @@ const logrequest = (req, res, next) => {
 
 //
 app.use(logrequest);
+app.use(passport.initialize());
 
 const menuItem = require("./Schema/menu.js");
-
-app.get("/", logrequest, (req, res) => {
+const localAuthMiddleware = passport.authenticate("local", { session: false });
+app.get("/", localAuthMiddleware, (req, res) => {
   res.send("Hello World!");
 });
 
