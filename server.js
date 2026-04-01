@@ -21,18 +21,17 @@ app.use(passport.initialize());
 
 const menuItem = require("./Schema/menu.js");
 const localAuthMiddleware = passport.authenticate("local", { session: false });
-app.get("/", localAuthMiddleware, (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-const menuRoutes = require("./Routes/menuRoutes.js");
-app.use("/menu", menuRoutes);
-
 // Importing router files
 const personRoutes = require("./Routes/personRoutes.js");
+const menuRoutes = require("./Routes/menuRoutes.js");
 
 // use the routers
-app.use("/person", personRoutes);
+app.use("/person", localAuthMiddleware, personRoutes);
+app.use("/menu", menuRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
