@@ -6,11 +6,11 @@ passport.use(
   new localStrategy(async (USERNAME, pwd, done) => {
     // Authentication Logic here
     try {
-      console.log("Credentials Recieved:", USERNAME, pwd);
+      //   console.log("Credentials Recieved:", USERNAME, pwd);
       const user = await Person.findOne({ username: USERNAME });
       if (!user) return done(null, false, { message: "Incorrect Username." });
 
-      const isPasswordMatch = user.password === pwd ? true : false;
+      const isPasswordMatch = user.comparePassword(password);
       if (isPasswordMatch) return done(null, user);
       else {
         return done(null, false, { message: "Incorrect Password" });
